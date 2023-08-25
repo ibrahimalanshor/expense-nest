@@ -1,0 +1,30 @@
+import { ConflictException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { QueryFailedError, Repository } from 'typeorm';
+import { CreateUserValues } from './users.interface';
+
+@Injectable()
+export class UsersService {
+    constructor(@InjectRepository(User) private userRepository: Repository<User>) {} 
+
+    async create(values: CreateUserValues): Promise<User> {
+        try {
+            const user = this.userRepository.create({
+                email: values.email,
+                name: values.name,
+                password: values.password
+            })
+    
+            await this.userRepository.save(user)
+    
+            return user
+        } catch (err) {
+            if (err instanceof QueryFailedError && err.driverError.code === 'ER_DUP_ENTRY') {
+                throw new ConflictException('User already exists')
+            }
+            
+            throw err
+        }
+    }
+}
