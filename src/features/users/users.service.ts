@@ -2,13 +2,13 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { QueryFailedError, Repository } from 'typeorm';
-import { CreateUserValues } from './users.interface';
+import { CreateValues, FindByEmailOptions } from './users.interface';
 
 @Injectable()
 export class UsersService {
     constructor(@InjectRepository(User) private userRepository: Repository<User>) {} 
 
-    async create(values: CreateUserValues): Promise<User> {
+    async create(values: CreateValues): Promise<User> {
         try {
             const user = this.userRepository.create({
                 email: values.email,
@@ -26,5 +26,15 @@ export class UsersService {
             
             throw err
         }
+    }
+
+    async findByEmail(email: string, options?: FindByEmailOptions): Promise<User> {
+        return await this.userRepository.findOneOrFail({
+            select: {
+                id: true,
+                password: options?.withPassword ?? false
+            },
+            where: { email }
+        })
     }
 }
