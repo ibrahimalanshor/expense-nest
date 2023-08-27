@@ -37,4 +37,8 @@ export class UsersService {
             where: { email }
         })
     }
+    
+    async findById(id: number): Promise<User> {
+        return await this.userRepository.findOneByOrFail({ id })
+    }
 }

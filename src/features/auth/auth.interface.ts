@@ -1,3 +1,5 @@
+import { User } from "../users/entities/user.entity"
+
 export interface RegisterCredential {
     name: string
     email: string
@@ -11,4 +13,11 @@ export interface LoginCredential {
 
 export interface AuthResult {
     accessToken: string
+}
+
+export interface AuthInfo {
+    auth: {
+        userId: number
+    },
+    user: User
 }

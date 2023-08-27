@@ -1,5 +1,6 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { hash } from 'bcrypt';
+import { Balance } from "src/features/balances/entities/balance.entity";
 
 @Entity({ name: 'users' })
 export class User {
@@ -14,6 +15,9 @@ export class User {
 
     @Column({ select: false })
     password: string
+
+    @OneToMany(() => Balance, balance => balance.user)
+    balances: Balance[]
 
     @CreateDateColumn()
     created_at: Date

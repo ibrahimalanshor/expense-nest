@@ -38,7 +38,7 @@ export class AuthService {
 
   async generateAuthResult(user: User): Promise<AuthResult> {
     const accessToken = await this.jwtService.signAsync({
-      user_id: user.id
+      userId: user.id
     })
 
     return {

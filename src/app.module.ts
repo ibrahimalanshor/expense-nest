@@ -7,6 +7,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './features/users/entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { BalancesModule } from './features/balances/balances.module';
+import { Balance } from './features/balances/entities/balance.entity';
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { JwtModule } from '@nestjs/jwt';
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User],
+        entities: [User, Balance],
         synchronize: true
       })
     }),
@@ -34,7 +36,8 @@ import { JwtModule } from '@nestjs/jwt';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET')
       }),
-    })
+    }),
+    BalancesModule
   ],
   controllers: [AppController],
   providers: [AppService],
