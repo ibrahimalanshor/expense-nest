@@ -4,7 +4,6 @@ import { AuthController } from './auth.controller';
 import { UsersModule } from 'src/features/users/users.module';
 
 @Module({
-  imports: [UsersModule],
   controllers: [AuthController],
   providers: [AuthService],
 })
