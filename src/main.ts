@@ -17,7 +17,7 @@ async function bootstrap() {
     exceptionFactory: (errors) => {
       return new UnprocessableEntityException({
         errors: errors.reduce((res: object, value: ValidationError) => {
-          res[value.property] = Object.values(value.constraints)[0]
+          res[value.property] = Object.values(value.children.length ? value.children[0].constraints : value.constraints)[0]
   
           return res
         },{})
