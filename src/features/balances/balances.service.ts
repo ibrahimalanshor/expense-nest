@@ -9,7 +9,11 @@ export class BalancesService {
     constructor(@InjectRepository(Balance) private balanceRepository: Repository<Balance>) {}
 
     async create(values: CreateValues): Promise<Balance> {
-        const balance = this.balanceRepository.create(values)
+        const balance = this.balanceRepository.create({
+            name: values.name,
+            balance: values.balance ?? 0,
+            user_id: values.user_id
+        })
 
         await this.balanceRepository.save(balance)
 
